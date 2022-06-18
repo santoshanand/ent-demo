@@ -1,17 +1,18 @@
-package entdemo
+package todo
 
 import (
 	"context"
+	"fmt"
 	"log"
-	"testing"
+
+	"github.com/santoshanand/ent-demo/ent"
+	"github.com/santoshanand/ent-demo/ent/todo"
 
 	"entgo.io/ent/dialect"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/santoshanand/ent-demo/ent"
-	"github.com/stretchr/testify/assert"
 )
 
-func TestUser(t *testing.T) {
+func Example() {
 	// Create an ent.Client with in-memory SQLite database.
 	client, err := ent.Open(dialect.SQLite, "file:ent?mode=memory&cache=shared&_fk=1")
 	if err != nil {
@@ -23,12 +24,11 @@ func TestUser(t *testing.T) {
 	if err := client.Schema.Create(ctx); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
-	// Output:
 
-	user1, err := client.User.Create().SetName("test user").Save(ctx)
+	task1, err := client.Todo.Create().SetText("Hello").SetStatus(todo.StatusInProgress).Save(ctx)
 	if err != nil {
-		log.Fatalf("failed cr	eating a todo: %v", err)
+		log.Fatalf("failed creating a todo: %v", err)
 	}
-	assert.Nil(t, err)
-	assert.NotNil(t, user1)
+	fmt.Println(task1)
+	// Output:
 }

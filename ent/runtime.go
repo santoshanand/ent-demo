@@ -3,18 +3,28 @@
 package ent
 
 import (
+	"time"
+
 	"github.com/santoshanand/ent-demo/ent/schema"
-	"github.com/santoshanand/ent-demo/ent/user"
+	"github.com/santoshanand/ent-demo/ent/todo"
 )
 
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	userFields := schema.User{}.Fields()
-	_ = userFields
-	// userDescName is the schema descriptor for name field.
-	userDescName := userFields[0].Descriptor()
-	// user.NameValidator is a validator for the "name" field. It is called by the builders before save.
-	user.NameValidator = userDescName.Validators[0].(func(string) error)
+	todoFields := schema.Todo{}.Fields()
+	_ = todoFields
+	// todoDescText is the schema descriptor for text field.
+	todoDescText := todoFields[0].Descriptor()
+	// todo.TextValidator is a validator for the "text" field. It is called by the builders before save.
+	todo.TextValidator = todoDescText.Validators[0].(func(string) error)
+	// todoDescCreatedAt is the schema descriptor for created_at field.
+	todoDescCreatedAt := todoFields[1].Descriptor()
+	// todo.DefaultCreatedAt holds the default value on creation for the created_at field.
+	todo.DefaultCreatedAt = todoDescCreatedAt.Default.(time.Time)
+	// todoDescPriority is the schema descriptor for priority field.
+	todoDescPriority := todoFields[3].Descriptor()
+	// todo.DefaultPriority holds the default value on creation for the priority field.
+	todo.DefaultPriority = todoDescPriority.Default.(int)
 }
